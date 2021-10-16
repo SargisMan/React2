@@ -12,18 +12,18 @@ code {
     monospace;
 }
 
-.card{
+.task{
   width: 150px;
   padding: 25px;
   border: 1px solid black;
   border-radius: 5px;
 }
 
-.card_wrapper {
+.task_wrapper {
   display:flex;
   justify-content: space-between;
   width: 70%;
-  margin: 0 auto;
+  margin: 100 auto;
 }
 
 .card.active{
@@ -38,3 +38,8 @@ code {
 .country.armenia{
   color:blue
 }
+
+.img{
+  width: 150px;
+}
+

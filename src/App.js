@@ -1,50 +1,88 @@
+import React, { Component } from "react";
 import "./App.css";
-import Card from "../src/Component/Card";
+// import Card from "../src/Component/Card";
 // import "./JSTests/classJS";
 
 // import A from "../src/JSTests/A";
 // import B from "../src/JSTests/B";
 // import D from '../src/JSTests/D'
-import  Counter from '../src/JSTests/Counter'
+import Counter from "../src/JSTests/Counter";
+// import './JSTests/example'
 
-function App() {
-  const card1 = {
-    imgUrl: "https://onex.am/img/svg/step1.svg",
-    imgAlt: "World Countries",
-    text: "Card1 Description",
+import ToDo from '../src/Component/ToDo/ToDo'
+
+class App extends Component {
+  state = {
+    login: false,
   };
 
-  const card2 = {
-    imgUrl: "https://onex.am/img/svg/step2.svg",
-    imgAlt: "Shoping pic",
-    text: "Card2 Description",
+  toggleLogin = () => {
+    this.setState({
+      login: !this.state.login,
+    });
   };
+  render() {
 
-  const card3 = {
-    imgUrl: "https://onex.am/img/svg/step2.svg",
-    imgAlt: "Smart Delivery",
-    text: "Card3 Description",
-  };
 
-  return (
-    <div className="App">
-      {/* <div className="card_wrapper">
-       <Card img={card1.imgUrl} imgAlt={card1.imgAlt} text={card1.text}/>
-       <Card img={card2.imgUrl} imgAlt={card2.imgAlt} text={card2.text}/>
-       <Card img={card3.imgUrl} imgAlt={card3.imgAlt} text={card3.text} active={true}/>
-      </div>     */}
+    //data
 
-      {/* <A />
-      <B className="BChild">
-        <h1>B Children</h1>
-        <span>I am a child</span>
-      </B>
-      <D name="name" username="username"/> */}
+    // const cards = [
+    //   {
+    //     imgUrl: "https://onex.am/img/svg/step1.svg",
+    //     imgAlt: "World Countries",
+    //     text: "Card1 Description",
+    //   },
+    //   {
+    //     imgUrl: "https://onex.am/img/svg/step2.svg",
+    //     imgAlt: "Shoping pic",
+    //     text: "Card2 Description",
+    //   },
+    //   {
+    //     imgUrl: "https://onex.am/img/svg/step2.svg",
+    //     imgAlt: "Smart Delivery",
+    //     text: "Card3 Description",
+    //   },
+    // ];
 
-      {/* <Counter counter={10}/> */}
-      <Counter counter={10}/>
-    </div>
-  );
+    // const { login } = this.state;
+    // const element = <p>Element P</p>;
+    // const elements = cards.map((card,index) => {
+    //   return(
+    //     <Card
+    //     key={index}
+    //     img={
+    //       card.imgUrl
+    //     }
+    //     text={card.text}
+    //     imgAlt={card.imgAlt}
+    //   />
+    //   )
+    // })
+      
+      
+    return (
+      <div className="App">
+      <ToDo />
+        {/* // {element}
+        // <div className="card_wrapper">{login && elements}</div> */}
+
+        {/* {login && (
+          <Card
+            img={
+              "https://images.unsplash.com/photo-1508921912186-1d1a45ebb3c1?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1374&q=80"
+            }
+            text="Test"
+            imgAlt="pic"
+          />
+        )} */}
+        {/* // <div>
+        //   <button onClick={this.toggleLogin}>
+        //     {login ? "Logout" : "Login"}
+        //   </button>
+        // </div> */}
+      </div>
+    );
+  }
 }
 
 export default App;
