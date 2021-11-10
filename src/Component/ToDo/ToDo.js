@@ -1,29 +1,55 @@
-import React from 'react'
+import React from 'react';
+import Task from '../Task/task';
 
 
 class ToDo extends React.Component {
     state={
-        tasks:['Task1','Task2','Task3']
+        tasks:['Task1','Task2'],
+        inputValue:''
     }
+
+    handleChange=(event)=>{
+      console.log(`event`, event.target.value);
+      this.setState({
+        inputValue: event.target.value,
+      });
+    }
+
+    handleReset=()=>{
+      this.setState({
+        inputValue:''
+      })
+    }
+
 render(){
+  const {tasks, inputValue}=this.state;
     const Tasks=this.state.tasks.map((task,index)=>{
         return(
-            <p key={index} className="task">
-                {task}
-                </p>
+            <Task task={task} key={index}/>
         )
     })
     return (
       <div>
         <h1>To do component</h1>
         <div>
-          <input 
-          type="text" 
-          placeholder="Add text"
-          >
-          </input>
+          <input
+            type="text"
+            placeholder="Add text"
+            onChange={this.handleChange}
+            value={inputValue}
+          ></input>
+          <button>Add</button>
+          <button
+          onClick={this.handleReset}
+          >Reset</button>
         </div>
-        <div className="task_wrapper">{Tasks}</div>
+        <div>
+          <p>{inputValue}</p>
+        </div>
+        <div className="task_wrapper">
+          {!tasks.length && <div>This is Empty</div>}
+          {Tasks}
+        </div>
       </div>
     );
 }
