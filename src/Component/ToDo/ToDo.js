@@ -1,5 +1,6 @@
 import React from 'react';
 import Task from '../Task/task';
+import AddTask from '../AddTask/AddTask'
 
 
 class ToDo extends React.Component {
@@ -31,6 +32,7 @@ render(){
     return (
       <div>
         <h1>To do component</h1>
+        <AddTask />
         <div>
           <input
             type="text"
