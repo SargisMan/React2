@@ -8,13 +8,22 @@ handleChange=(event)=>{
     const {value}=event.target;
     this.setState({
         inputValue: value
-    },()=>{
-      console.log(`Render`, this.state.inputValue)
-    })
+    }
+    // ,()=>{
+    //   console.log(`Render`, this.state.inputValue)
+    // }
+    )
 }
 
     render(){
       const {inputValue}=this.state;
+      const {handleSubmit}=this.props;
+      const handleS=()=>{
+        handleSubmit(inputValue);
+        this.setState({
+          inputValue:''
+        });
+      }
         return (
           <div>
             <input
@@ -23,7 +32,9 @@ handleChange=(event)=>{
               onChange={this.handleChange}
               value={inputValue}
             ></input>
-            <button>Add</button>
+            <button
+            onClick={handleS}
+            >Add</button>
             {/* <button onClick={this.handleReset}>Reset</button> */}
           </div>
         );

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import "./App.css";
-import A from './Test/A'
-// import ToDo from '../src/Component/ToDo/ToDo'
+// import A from './Test/A'
+import ToDo from '../src/Component/ToDo/ToDo'
 
 class App extends Component {
   state = {
@@ -16,8 +16,8 @@ plusCounter=()=>{
   render() {  
     return (
       <div className="App">
-      {/* <ToDo /> */}
-      <A />
+      <ToDo />
+      {/* <A /> */}
       </div>
     );
   }
