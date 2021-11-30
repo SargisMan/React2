@@ -2,9 +2,9 @@ import React from 'react';
 
 const Task=({task})=>{
     return (
-      <p className="task">
-        {task}
-      </p>
+      <div>
+        <p className="task">{task}</p>
+      </div>
     );
 }
 

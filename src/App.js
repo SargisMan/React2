@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import "./App.css";
 // import A from './Test/A'
-import ToDo from '../src/Component/ToDo/ToDo'
+import ToDo from '../src/Component/ToDo/ToDo';
+import image from './assets/pics/nature1.jpg'
 
 class App extends Component {
   state = {
@@ -17,6 +18,7 @@ plusCounter=()=>{
     return (
       <div className="App">
       <ToDo />
+      <img src={image} alt=""></img>
       {/* <A /> */}
       </div>
     );
