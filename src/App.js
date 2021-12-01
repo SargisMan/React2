@@ -2,7 +2,8 @@ import React, { Component } from "react";
 import "./App.css";
 // import A from './Test/A'
 import ToDo from '../src/Component/ToDo/ToDo';
-import image from './assets/pics/nature1.jpg'
+// import image from './assets/pics/nature1.jpg'
+import Grid from './Test/Grid/Grid'
 
 class App extends Component {
   state = {
@@ -17,8 +18,9 @@ plusCounter=()=>{
   render() {  
     return (
       <div className="App">
-      <ToDo />
-      <img src={image} alt=""></img>
+        {/* <Grid /> */}
+      <ToDo test="true"/>
+      {/* <img src={image} alt=""></img> */}
       {/* <A /> */}
       </div>
     );

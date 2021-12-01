@@ -1,6 +1,7 @@
 import React from 'react';
 import Task from '../Task/task';
-import AddTask from '../AddTask/AddTask'
+import AddTask from '../AddTask/AddTask';
+import idGenerator from '../../helpers/idGenerator';
 
 
 class ToDo extends React.Component {
@@ -22,7 +23,7 @@ render(){
   const {tasks}=this.state;
     const Tasks=this.state.tasks.map((task,index)=>{
         return(
-            <Task task={task} key={index}/>
+            <Task task={task} key={idGenerator()}/>
         )
     })
     return (
