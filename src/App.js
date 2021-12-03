@@ -3,7 +3,7 @@ import "./App.css";
 // import A from './Test/A'
 import ToDo from '../src/Component/ToDo/ToDo';
 // import image from './assets/pics/nature1.jpg'
-import Grid from './Test/Grid/Grid'
+// import Grid from './Test/Grid/Grid'
 
 class App extends Component {
   state = {
