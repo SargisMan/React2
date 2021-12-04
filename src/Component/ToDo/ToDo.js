@@ -44,6 +44,16 @@ class ToDo extends React.Component {
     });
   };
 
+  handleDeleteOneTask=(id)=>{
+let tasks=[...this.state.tasks];
+tasks=tasks.filter(item=>item._id !==id);
+this.setState({
+  tasks
+});
+// const idx=tasks.findIndex(item=>item._id===id);
+// tasks.splice(idx,1);
+  }
+
   render() {
     const { tasks } = this.state;
     const Tasks = this.state.tasks.map((task) => {
@@ -55,7 +65,10 @@ class ToDo extends React.Component {
           md={6} //կերևա 2 հատ
           xl={3} //ամենաշատը 3 հատ կերևա
         >
-          <Task task={task} />
+          <Task 
+          task={task} 
+          handleDeleteOneTask={this.handleDeleteOneTask}
+          />
         </Col>
       );
     });
