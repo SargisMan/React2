@@ -2,7 +2,8 @@ import React from 'react';
 import Task from '../Task/task';
 import AddTask from '../AddTask/AddTask';
 import idGenerator from '../../helpers/idGenerator';
-import {Container, Row, Col} from 'react-bootstrap'
+import {Container, Row, Col, Button} from 'react-bootstrap'
+// import Button from '@restart/ui/esm/Button';
 
 
 class ToDo extends React.Component {
@@ -29,6 +30,7 @@ class ToDo extends React.Component {
          or service at each stage of production, distribution, or sale to the end consumer.`,
       },
     ],
+    removeTasks: [],
   };
 
   handleSubmit = (value) => {
@@ -44,18 +46,42 @@ class ToDo extends React.Component {
     });
   };
 
-  handleDeleteOneTask=(id)=>{
-let tasks=[...this.state.tasks];
-tasks=tasks.filter(item=>item._id !==id);
-this.setState({
-  tasks
-});
-// const idx=tasks.findIndex(item=>item._id===id);
-// tasks.splice(idx,1);
+  handleDeleteOneTask = (id) => {
+    let tasks = [...this.state.tasks];
+    tasks = tasks.filter((item) => item._id !== id);
+    this.setState({
+      tasks,
+    });
+    // const idx=tasks.findIndex(item=>item._id===id);
+    // tasks.splice(idx,1);
+  };
+
+  toggleSetRemoveTaskIds = (_id) => {
+    let removeTasks = [...this.state.removeTasks];
+    if (removeTasks.includes(_id)) {
+      removeTasks = removeTasks.filter((id) => id !== _id);
+    } else {
+      removeTasks.push(_id);
+    }
+
+    this.setState({
+      removeTasks,
+    });
+  };
+
+  removeSelectedTasks=()=>{
+    let tasks=[...this.state.tasks];
+    const removeTasks=[...this.state.removeTasks];
+   tasks=tasks.filter(item=>!removeTasks.includes(item._id));
+
+    this.setState({
+      tasks,
+      removeTasks:[]
+    })
   }
 
   render() {
-    const { tasks } = this.state;
+    const { tasks, removeTasks } = this.state;
     const Tasks = this.state.tasks.map((task) => {
       return (
         <Col
@@ -65,9 +91,11 @@ this.setState({
           md={6} //կերևա 2 հատ
           xl={3} //ամենաշատը 3 հատ կերևա
         >
-          <Task 
-          task={task} 
-          handleDeleteOneTask={this.handleDeleteOneTask}
+          <Task
+            task={task}
+            handleDeleteOneTask={this.handleDeleteOneTask}
+            toggleSetRemoveTaskIds={this.toggleSetRemoveTaskIds}
+            disabled={!!removeTasks.length}
           />
         </Col>
       );
@@ -78,12 +106,27 @@ this.setState({
           <Row className="mt-4">
             <Col>
               <h1>To do component</h1>
-              <AddTask handleSubmit={this.handleSubmit} />
+              <AddTask
+                handleSubmit={this.handleSubmit}
+                disabled={!!removeTasks.length}
+              />
             </Col>
           </Row>
           <Row className="mt-4">
             {!tasks.length && <div>This is Empty</div>}
             {Tasks}
+          </Row>
+          <Row>
+            <Col>
+              <Button
+                variant="danger"
+                className="mt-5"
+                onClick={this.removeSelectedTasks}
+                disabled={!!!removeTasks.length}
+              >
+                Remove Selected
+              </Button>
+            </Col>
           </Row>
         </Container>
       </div>

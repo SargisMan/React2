@@ -43,3 +43,8 @@ code {
   width: 150px;
 }
 
+.cardBody{
+  display:flex;
+  flex-direction: column;
+  justify-content: space-between;
+}

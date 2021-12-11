@@ -1,0 +1,25 @@
+.task {
+    width: 80%;
+    background-color: rgba(160, 144, 144, .3);
+    padding: 50px;
+    color: rgb(69, 69, 22);
+    margin-left: 10px;
+}
+
+.first{
+    background-color: green;
+}
+
+.second{
+    color: yellow;
+}
+
+.third{
+    transform:scale(1.2)
+}
+
+.card{
+    background-color: rgba(169, 146,192, .8);
+    color: white;
+    width: 18rem
+}
