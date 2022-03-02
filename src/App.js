@@ -2,26 +2,18 @@ import React, { Component } from "react";
 import "./App.css";
 // import A from './Test/A'
 import ToDo from '../src/Component/ToDo/ToDo';
-// import image from './assets/pics/nature1.jpg'
-// import Grid from './Test/Grid/Grid'
+// import LifeCycle from "./Demo/Lifecycle";
 
 class App extends Component {
   state = {
-    counter:0
+    lifeCycle: true,
   };
 
-plusCounter=()=>{
-  this.setState({
-    counter:this.state.counter+1
-  })
-}
-  render() {  
+  render() {
     return (
       <div className="App">
-        {/* <Grid /> */}
-      <ToDo test="true"/>
-      {/* <img src={image} alt=""></img> */}
-      {/* <A /> */}
+        <ToDo test="true"/>
+        {/* {this.state.lifeCycle && <LifeCycle />} */}
       </div>
     );
   }

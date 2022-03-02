@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Fragment} from 'react';
 import Task from '../Task/task';
 import AddTask from '../AddTask/AddTask';
 import idGenerator from '../../helpers/idGenerator';
@@ -30,7 +30,8 @@ class ToDo extends React.Component {
          or service at each stage of production, distribution, or sale to the end consumer.`,
       },
     ],
-    removeTasks: [],
+    removeTasks: new Set(),
+    isAllChecked:false
   };
 
   handleSubmit = (value) => {
@@ -57,11 +58,11 @@ class ToDo extends React.Component {
   };
 
   toggleSetRemoveTaskIds = (_id) => {
-    let removeTasks = [...this.state.removeTasks];
-    if (removeTasks.includes(_id)) {
-      removeTasks = removeTasks.filter((id) => id !== _id);
+    let removeTasks = new Set(this.state.removeTasks);
+    if (removeTasks.has(_id)) {
+      removeTasks.delete(_id);
     } else {
-      removeTasks.push(_id);
+      removeTasks.add(_id);
     }
 
     this.setState({
@@ -69,20 +70,37 @@ class ToDo extends React.Component {
     });
   };
 
-  removeSelectedTasks=()=>{
-    let tasks=[...this.state.tasks];
-    const removeTasks=[...this.state.removeTasks];
-   tasks=tasks.filter(item=>!removeTasks.includes(item._id));
+  removeSelectedTasks = () => {
+    let tasks = [...this.state.tasks];
+    const { removeTasks } = this.state;
+    tasks = tasks.filter((item) => !removeTasks.has(item._id));
 
     this.setState({
       tasks,
-      removeTasks:[]
-    })
+      removeTasks: new Set(),
+      isAllChecked:false
+    });
+  };
+
+  handleToggleCheckAll = () => {
+    const {tasks, isAllChecked}=this.state;
+    let removeTasks=new Set();
+    if(!isAllChecked){
+    removeTasks=new Set(this.state.removeTasks);
+    tasks.forEach(task=>{
+      removeTasks.add(task._id)
+    });
+  }
+    this.setState({
+      removeTasks,
+      isAllChecked:!isAllChecked
+    });
   }
 
   render() {
-    const { tasks, removeTasks } = this.state;
-    const Tasks = this.state.tasks.map((task) => {
+    const { tasks, removeTasks,  isAllChecked } = this.state;
+    const Tasks = this.state.tasks.map((task, index) => {
+      // սարքում ենք Tasks-ը, որ return անենք
       return (
         <Col
           key={task._id}
@@ -95,41 +113,54 @@ class ToDo extends React.Component {
             task={task}
             handleDeleteOneTask={this.handleDeleteOneTask}
             toggleSetRemoveTaskIds={this.toggleSetRemoveTaskIds}
-            disabled={!!removeTasks.length}
+            disabled={!!removeTasks.size}
+            checked={removeTasks.has(task._id)}
           />
         </Col>
       );
     });
     return (
-      <div>
-        <Container>
-          <Row className="mt-4">
-            <Col>
-              <h1>To do component</h1>
-              <AddTask
-                handleSubmit={this.handleSubmit}
-                disabled={!!removeTasks.length}
-              />
-            </Col>
-          </Row>
-          <Row className="mt-4">
-            {!tasks.length && <div>This is Empty</div>}
-            {Tasks}
-          </Row>
-          <Row>
-            <Col>
-              <Button
-                variant="danger"
-                className="mt-5"
-                onClick={this.removeSelectedTasks}
-                disabled={!!!removeTasks.length}
-              >
-                Remove Selected
-              </Button>
-            </Col>
-          </Row>
-        </Container>
-      </div>
+      <Fragment>
+        <div>
+          <Container>
+            <Row className="mt-4">
+              <Col>
+                <h1>To do component</h1>
+                <AddTask
+                  handleSubmit={this.handleSubmit}
+                  disabled={!!removeTasks.size}
+                />
+              </Col>
+            </Row>
+            <Row className="mt-4">
+              {!tasks.length && <div>This is Empty</div>}
+              {Tasks} {/* դնում ենք վերևում սարքած Tasks-ը */}
+            </Row>
+            <Row>
+              <Col>
+                <Button
+                  variant="danger"
+                  onClick={this.removeSelectedTasks}
+                  disabled={!!!removeTasks.size}
+                >
+                  Remove Selected
+                </Button>
+                <Button
+                  variant="primary"
+                  className="ml-5"
+                  onClick={this.handleToggleCheckAll}
+                  disabled={!!!tasks.length}
+                >
+                  {isAllChecked ? "RemoveAllSelected" : "Select All"}
+                </Button>
+              </Col>
+            </Row>
+          </Container>
+        </div>
+        <div>
+          Haram Div
+        </div>
+      </Fragment>
     );
   }
 }
