@@ -4,6 +4,8 @@ import AddTask from '../AddTask/AddTask';
 import idGenerator from '../../helpers/idGenerator';
 import {Container, Row, Col, Button} from 'react-bootstrap'
 // import Button from '@restart/ui/esm/Button';
+// import withTest from '../../Hoc/whithTest';
+import withScreenSizes from '../../Hoc/withScreenSizes';
 
 
 class ToDo extends React.Component {
@@ -98,6 +100,7 @@ class ToDo extends React.Component {
   }
 
   render() {
+    // console.log('props ToDo',this.props)
     const { tasks, removeTasks,  isAllChecked } = this.state;
     const Tasks = this.state.tasks.map((task, index) => {
       // սարքում ենք Tasks-ը, որ return անենք
@@ -119,6 +122,7 @@ class ToDo extends React.Component {
         </Col>
       );
     });
+    // console.log("test",this.props.test)
     return (
       <Fragment>
         <div>
@@ -165,4 +169,4 @@ class ToDo extends React.Component {
   }
 }
 
-export default ToDo;
+export default withScreenSizes(ToDo);

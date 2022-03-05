@@ -1,4 +1,5 @@
 import React from 'react';
+import whithTest from '../Hoc/whithTest';
 
 class LifeCycle extends React.Component {
   constructor(props) {
@@ -28,6 +29,7 @@ class LifeCycle extends React.Component {
   }
 
   render() {
+    // console.log('test', this.props.test)
     // console.log(`Render`);
     return (
       <div>
@@ -60,4 +62,4 @@ class LifeCycle extends React.Component {
   }
 }
 
-export default LifeCycle;
+export default whithTest(LifeCycle);
