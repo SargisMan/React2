@@ -5,7 +5,9 @@ import idGenerator from '../../helpers/idGenerator';
 import {Container, Row, Col, Button} from 'react-bootstrap'
 // import Button from '@restart/ui/esm/Button';
 // import withTest from '../../Hoc/whithTest';
-import withScreenSizes from '../../Hoc/withScreenSizes';
+// import withScreenSizes from '../../Hoc/withScreenSizes';
+import Confirm from '../Confirm/Confirm';
+import EditTaskModal from '../EditTaskModal/EditTaskModal'
 
 
 class ToDo extends React.Component {
@@ -13,36 +15,42 @@ class ToDo extends React.Component {
     tasks: [
       {
         _id: idGenerator(),
-        text: `Income tax     ։ An income tax is a tax imposed on individuals or entities 
+        title: "Income tax ",
+        description: `An income tax is a tax imposed on individuals or entities 
         (taxpayers) in respect of the income or profits earned by them (commonly called taxable income). 
         Income tax generally is computed as the product of a tax rate times the taxable income. 
         Taxation rates may vary by type or characteristics of the taxpayer and the type of income.`,
       },
       {
         _id: idGenerator(),
-        text: `Corporate tax   ։ A corporate tax, also called corporation tax or company tax, is a direct 
+        title: "Corporate tax",
+        description: `A corporate tax, also called corporation tax or company tax, is a direct 
         tax imposed by a jurisdiction on the income or capital of corporations or analogous legal entities. 
         Many countries impose such taxes at the national level, and a similar tax may be imposed at state 
-        or local levels. The taxes may also be referred to as income tax or capital tax. `,
+        or local levels. The taxes may also be referred to as income tax or capital tax.`,
       },
       {
         _id: idGenerator(),
-        text: `Value-added tax ։ A value-added tax (VAT), known in some countries as a goods and services
+        title: "Value-added tax",
+        description: `A value-added tax (VAT), known in some countries as a goods and services
          tax (GST), is a type of tax that is assessed incrementally. It is levied on the price of a product 
          or service at each stage of production, distribution, or sale to the end consumer.`,
       },
     ],
     removeTasks: new Set(),
-    isAllChecked:false
+    isAllChecked: false,
+    isConfirmModal: false,
+    editableTask: null,
   };
 
-  handleSubmit = (value) => {
-    if (!value) return;
-    console.log(`value`, value);
+  handleSubmit = (formData) => {
+    if (!formData.title || !formData.description) return;
+    // console.log(`value`, value);
     const tasks = [...this.state.tasks];
     tasks.push({
       _id: idGenerator(),
-      text: value,
+      title: formData.title,
+      description: formData.description,
     });
     this.setState({
       tasks,
@@ -80,28 +88,55 @@ class ToDo extends React.Component {
     this.setState({
       tasks,
       removeTasks: new Set(),
-      isAllChecked:false
+      isAllChecked: false,
     });
   };
 
   handleToggleCheckAll = () => {
-    const {tasks, isAllChecked}=this.state;
-    let removeTasks=new Set();
-    if(!isAllChecked){
-    removeTasks=new Set(this.state.removeTasks);
-    tasks.forEach(task=>{
-      removeTasks.add(task._id)
-    });
-  }
+    const { tasks, isAllChecked } = this.state;
+    let removeTasks = new Set();
+    if (!isAllChecked) {
+      removeTasks = new Set(this.state.removeTasks);
+      tasks.forEach((task) => {
+        removeTasks.add(task._id);
+      });
+    }
     this.setState({
       removeTasks,
-      isAllChecked:!isAllChecked
+      isAllChecked: !isAllChecked,
     });
+  };
+
+  handleToggleOpenModal = () => {
+    this.setState({
+      isConfirmModal: !this.state.isConfirmModal,
+    });
+  };
+
+  handleSetEditTask = (task) => {
+    this.setState({
+      editableTask: task,
+    });
+  };
+
+  setEditableTaskNull=()=>{
+    this.setState({
+      editableTask:null
+    })
   }
 
+  handleEditTask = (editTask) => {
+        const tasks = [...this.state.tasks];
+        const idx = tasks.findIndex((task) => task._id === editTask._id);
+        tasks[idx] = editTask;
+        this.setState({
+            tasks
+        });
+    }
   render() {
     // console.log('props ToDo',this.props)
-    const { tasks, removeTasks,  isAllChecked } = this.state;
+    const { tasks, removeTasks, isAllChecked, isConfirmModal, editableTask } =
+      this.state;
     const Tasks = this.state.tasks.map((task, index) => {
       // սարքում ենք Tasks-ը, որ return անենք
       return (
@@ -118,6 +153,7 @@ class ToDo extends React.Component {
             toggleSetRemoveTaskIds={this.toggleSetRemoveTaskIds}
             disabled={!!removeTasks.size}
             checked={removeTasks.has(task._id)}
+            handleSetEditTask={this.handleSetEditTask}
           />
         </Col>
       );
@@ -144,7 +180,8 @@ class ToDo extends React.Component {
               <Col>
                 <Button
                   variant="danger"
-                  onClick={this.removeSelectedTasks}
+                  // onClick={this.removeSelectedTasks}
+                  onClick={this.handleToggleOpenModal}
                   disabled={!!!removeTasks.size}
                 >
                   Remove Selected
@@ -160,13 +197,25 @@ class ToDo extends React.Component {
               </Col>
             </Row>
           </Container>
-        </div>
-        <div>
-          Haram Div
+          {isConfirmModal && (
+            <Confirm
+              onHide={this.handleToggleOpenModal}
+              onSubmit={this.removeSelectedTasks}
+              // count={removeTasks.size}
+              massage={`Do you want delet ${removeTasks.size} task ?`}
+            />
+          )}
+          {editableTask && 
+            <EditTaskModal
+              editableTask={editableTask}
+              onHide={this.setEditableTaskNull}
+              onSubmit={this.handleEditTask}
+            />
+          }
         </div>
       </Fragment>
     );
   }
 }
 
-export default withScreenSizes(ToDo);
+export default ToDo;

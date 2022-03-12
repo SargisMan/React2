@@ -23,6 +23,7 @@ height:window.innerHeight
 
     render(){
         return <Component 
+        {...this.props}
         width={this.state.width} 
         height={this.state.height}/>
     }

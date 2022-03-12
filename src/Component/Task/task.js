@@ -5,14 +5,15 @@ import { faTrash, faEdit } from "@fortawesome/free-solid-svg-icons";
 import styles from './task.module.css';
 import PropTypes from 'prop-types'
 
-const Task = ({ 
+const Task = ({
   task, //object
   disabled, //boolean
   handleDeleteOneTask, //function
   toggleSetRemoveTaskIds,
-  checked 
+  checked,
+  handleSetEditTask
 }) => {
-  console.log(`render`)
+  // console.log(`render`);
   return (
     <Card className={`${styles.card} ${checked && styles.checked}`}>
       <Card.Body className="cardBody">
@@ -24,8 +25,8 @@ const Task = ({
           // onKeyPress={()=>console.log("key Press")}
           checked={checked}
         />
-        <Card.Title>Title: {task.text.slice(0, 15)}</Card.Title>
-        <Card.Text>Description: {task.text}</Card.Text>
+        <Card.Title>Title: {task.title}</Card.Title>
+        <Card.Text>Description: {task.description}</Card.Text>
         <div>
           <Button
             disabled={disabled}
@@ -36,7 +37,11 @@ const Task = ({
           >
             <FontAwesomeIcon icon={faTrash} />
           </Button>
-          <Button variant="warning" className="ml-3">
+          <Button
+            variant="warning"
+            className="ml-3"
+            onClick={() => handleSetEditTask(task)}
+          >
             <FontAwesomeIcon icon={faEdit} />
           </Button>
         </div>
@@ -105,16 +110,17 @@ const Task = ({
 //   }
 // }
 
-Task.propTypes={
-  task:PropTypes.shape({
-    _id:PropTypes.string.isRequired,
-    text:PropTypes.string.isRequired
+Task.propTypes = {
+  task: PropTypes.shape({
+    _id: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired,
+    description: PropTypes.string.isRequired,
   }),
-  disabled:PropTypes.bool.isRequired,
-  handleDeleteOneTask:PropTypes.func.isRequired,
-  toggleSetRemoveTaskIds:PropTypes.func.isRequired,
-  checked:PropTypes.bool.isRequired
-
-}
+  disabled: PropTypes.bool.isRequired,
+  handleDeleteOneTask: PropTypes.func.isRequired,
+  toggleSetRemoveTaskIds: PropTypes.func.isRequired,
+  checked: PropTypes.bool.isRequired,
+  handleSetEditTask: PropTypes.func.isRequired
+};
 
 export default memo(Task);
