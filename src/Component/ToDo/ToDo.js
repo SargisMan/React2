@@ -1,13 +1,13 @@
 import React, {Fragment} from 'react';
 import Task from '../Task/task';
-import AddTask from '../AddTask/AddTask';
 import idGenerator from '../../helpers/idGenerator';
 import {Container, Row, Col, Button} from 'react-bootstrap'
 // import Button from '@restart/ui/esm/Button';
 // import withTest from '../../Hoc/whithTest';
 // import withScreenSizes from '../../Hoc/withScreenSizes';
 import Confirm from '../Confirm/Confirm';
-import EditTaskModal from '../EditTaskModal/EditTaskModal'
+import EditTaskModal from '../EditTaskModal/EditTaskModal';
+import AddTaskModal from '../AddTaskModal/AddTaskModal'
 
 
 class ToDo extends React.Component {
@@ -41,6 +41,7 @@ class ToDo extends React.Component {
     isAllChecked: false,
     isConfirmModal: false,
     editableTask: null,
+    isOpenAddTaskModal: false,
   };
 
   handleSubmit = (formData) => {
@@ -119,24 +120,42 @@ class ToDo extends React.Component {
     });
   };
 
-  setEditableTaskNull=()=>{
+  setEditableTaskNull = () => {
     this.setState({
-      editableTask:null
-    })
-  }
+      editableTask: null,
+    });
+  };
 
   handleEditTask = (editTask) => {
-        const tasks = [...this.state.tasks];
-        const idx = tasks.findIndex((task) => task._id === editTask._id);
-        tasks[idx] = editTask;
-        this.setState({
-            tasks
-        });
-    }
+    const tasks = [...this.state.tasks];
+    const idx = tasks.findIndex((task) => task._id === editTask._id);
+    tasks[idx] = editTask;
+    this.setState({
+      tasks,
+    });
+  };
+
+  toggleOpenAddTaskModal = () => {
+    this.setState({
+      isOpenAddTaskModal: !this.state.isOpenAddTaskModal
+    });
+  };
+
+  // componentDidUpdate(prevProps,prevState){
+  //   console.log('prevState', prevState);
+  // }
+
+
   render() {
     // console.log('props ToDo',this.props)
-    const { tasks, removeTasks, isAllChecked, isConfirmModal, editableTask } =
-      this.state;
+    const {
+      tasks,
+      removeTasks,
+      isAllChecked,
+      isConfirmModal,
+      editableTask,
+      isOpenAddTaskModal
+    } = this.state;
     const Tasks = this.state.tasks.map((task, index) => {
       // սարքում ենք Tasks-ը, որ return անենք
       return (
@@ -165,11 +184,9 @@ class ToDo extends React.Component {
           <Container>
             <Row className="mt-4">
               <Col>
-                <h1>To do component</h1>
-                <AddTask
-                  handleSubmit={this.handleSubmit}
-                  disabled={!!removeTasks.size}
-                />
+                <Button variant="primary" onClick={this.toggleOpenAddTaskModal}>
+                  Add Task
+                </Button>
               </Col>
             </Row>
             <Row className="mt-4">
@@ -205,13 +222,19 @@ class ToDo extends React.Component {
               massage={`Do you want delet ${removeTasks.size} task ?`}
             />
           )}
-          {editableTask && 
+          {editableTask && (
             <EditTaskModal
               editableTask={editableTask}
               onHide={this.setEditableTaskNull}
               onSubmit={this.handleEditTask}
             />
-          }
+          )}
+          {isOpenAddTaskModal && (
+            <AddTaskModal
+              onHide={this.toggleOpenAddTaskModal}
+              handleSubmit={this.handleSubmit}
+            />
+          )}
         </div>
       </Fragment>
     );

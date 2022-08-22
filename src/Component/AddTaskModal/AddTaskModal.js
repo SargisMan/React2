@@ -1,41 +1,52 @@
 import React from 'react';
-import {Modal, Button, Form} from 'react-bootstrap'
+import {Form, Button, Modal} from 'react-bootstrap';
+import PropTypes from 'prop-types';
 
-class EditTaskModal extends React.Component {
-  constructor(props) {
+class AddTask extends React.Component {
+  constructor(props){
     super(props);
-    this.state = {
-      ...props.editableTask,
-      //_id
-      //title
-      //description
+    this.inputRef=React.createRef()
+    this.state={
+      title:'',
+      description:''
     }
-    this.inputRef=React.createRef(null);
   }
-
-  componentDidMount(){
-    // console.log('this.inputRef',this.inputRef);
-    this.inputRef.current.focus();
-  }
-  handleChange = (event) => {
-    const { name, value } = event.target;
+state = {
+    inputValue:''
+}
+handleChange=(event)=>{
+    const {name, value}=event.target;
     this.setState({
-      [name]: value,
-    });
-  };
+        [name]: value
+    }
+    );
+}
 
-  handleS = ({ type, key }) => {
-    if (type === "keypress" && key !== "Enter") return;
-    const { onSubmit, onHide } = this.props;
-    onSubmit(this.state);
-    onHide();
-  };
+handleS = ({key, type}) => {
+const { title,description } = this.state;
+const { handleSubmit, onHide } = this.props;
+  if(
+    (type==='keypress'&& key!=='Enter')||(!title && !description)
+    ) return;
+  // console.log("input", this.inputRef.current.value);
 
-  render() {
-    console.log('EditTaskRender')
-    const { onHide } = this.props;
+const formData={
+  title,
+  description
+}
+ handleSubmit(formData);
+        onHide();
+      }
+      
+
+      componentDidMount(){
+      this.inputRef.current.focus();
+      }
+
+    render(){
     const { title, description } = this.state;
-    return (
+    const {onHide}=this.props
+      return(
       <Modal
         show={true}
         onHide={onHide}
@@ -45,7 +56,7 @@ class EditTaskModal extends React.Component {
       >
         <Modal.Header closeButton>
           <Modal.Title id="contained-modal-title-vcenter">
-            Edit Task Modal
+            Add Task Modal
           </Modal.Title>
         </Modal.Header>
 
@@ -77,22 +88,20 @@ class EditTaskModal extends React.Component {
           <Button onClick={onHide} variant="secondary">
             Close
           </Button>
-          <Button onClick={this.handleS} variant="primary">
-            Save
+          <Button 
+          onClick={this.handleS} 
+          variant="primary"
+          disabled={!!!title||!!!description}>
+            Add
           </Button>
         </Modal.Footer>
       </Modal>
-    );
-  }
-  // componentDidMount(){
-  //   console.log('ComponentDidMount')
-  // }
-  componentDidUpdate(){
-    console.log('ComponentDidUpdate')
-  }
-  componentWillUnmount(){
-    console.log('ComponentWillUnmount')
-  }
+        );
+    }
 }
 
-export default EditTaskModal;
+AddTask.propTypes={
+  handleSubmit:PropTypes.func.isRequired,
+  onHide: PropTypes.func.isRequired
+}
+export default AddTask;
