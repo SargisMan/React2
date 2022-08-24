@@ -1,42 +1,19 @@
 import React, {Fragment} from 'react';
 import Task from '../Task/task';
-import idGenerator from '../../helpers/idGenerator';
+// import idGenerator from '../../helpers/idGenerator';
+import dateFommatter from '../../helpers/date';
 import {Container, Row, Col, Button} from 'react-bootstrap'
 // import Button from '@restart/ui/esm/Button';
 // import withTest from '../../Hoc/whithTest';
 // import withScreenSizes from '../../Hoc/withScreenSizes';
 import Confirm from '../Confirm/Confirm';
-import EditTaskModal from '../EditTaskModal/EditTaskModal';
-import AddTaskModal from '../AddTaskModal/AddTaskModal'
+// import EditTaskModal from '../EditTaskModal/EditTaskModal';
+import TaskActionsModal from '../TaskActionsModal/TaskActionsModal'
 
 
 class ToDo extends React.Component {
   state = {
-    tasks: [
-      {
-        _id: idGenerator(),
-        title: "Income tax ",
-        description: `An income tax is a tax imposed on individuals or entities 
-        (taxpayers) in respect of the income or profits earned by them (commonly called taxable income). 
-        Income tax generally is computed as the product of a tax rate times the taxable income. 
-        Taxation rates may vary by type or characteristics of the taxpayer and the type of income.`,
-      },
-      {
-        _id: idGenerator(),
-        title: "Corporate tax",
-        description: `A corporate tax, also called corporation tax or company tax, is a direct 
-        tax imposed by a jurisdiction on the income or capital of corporations or analogous legal entities. 
-        Many countries impose such taxes at the national level, and a similar tax may be imposed at state 
-        or local levels. The taxes may also be referred to as income tax or capital tax.`,
-      },
-      {
-        _id: idGenerator(),
-        title: "Value-added tax",
-        description: `A value-added tax (VAT), known in some countries as a goods and services
-         tax (GST), is a type of tax that is assessed incrementally. It is levied on the price of a product 
-         or service at each stage of production, distribution, or sale to the end consumer.`,
-      },
-    ],
+    tasks: [],
     removeTasks: new Set(),
     isAllChecked: false,
     isConfirmModal: false,
@@ -46,16 +23,31 @@ class ToDo extends React.Component {
 
   handleSubmit = (formData) => {
     if (!formData.title || !formData.description) return;
+    formData.date=dateFommatter(formData.date);
     // console.log(`value`, value);
     const tasks = [...this.state.tasks];
-    tasks.push({
-      _id: idGenerator(),
-      title: formData.title,
-      description: formData.description,
-    });
-    this.setState({
-      tasks,
-    });
+    fetch("http://localhost:3001/task",{
+      method:"POST",
+      body:JSON.stringify(formData),
+      headers:{
+        "Content-Type":"application/json"
+      }
+    })
+    .then(res=>res.json())
+    .then(data=>{
+      if(data.error){
+        throw data.error
+      };
+      tasks.push(data);
+      this.setState({
+        tasks,
+      });
+      console.log('data',data);      
+    })
+    .catch(error=>{
+      console.log("Catch error",error)
+    })
+
   };
 
   handleDeleteOneTask = (id) => {
@@ -82,15 +74,30 @@ class ToDo extends React.Component {
   };
 
   removeSelectedTasks = () => {
-    let tasks = [...this.state.tasks];
-    const { removeTasks } = this.state;
-    tasks = tasks.filter((item) => !removeTasks.has(item._id));
+    fetch("http://localhost:3001/task",{
+      method:"PATCH",
+      body:JSON.stringify({tasks:Array.from(this.state.removeTasks)}),
+      headers:{
+        "Content-Type":"Application/json"
+      }
+    })
+    .then(res=>res.json())
+    .then(data=>{
+      if(data.error){
+        throw data.error
+      }
 
-    this.setState({
-      tasks,
-      removeTasks: new Set(),
-      isAllChecked: false,
-    });
+    let tasks = [...this.state.tasks];
+        const { removeTasks } = this.state;
+        tasks = tasks.filter((item) => !removeTasks.has(item._id));
+
+        this.setState({
+          tasks,
+          removeTasks: new Set(),
+          isAllChecked: false,
+        });
+      console.log('data',data)
+    })
   };
 
   handleToggleCheckAll = () => {
@@ -145,6 +152,22 @@ class ToDo extends React.Component {
   //   console.log('prevState', prevState);
   // }
 
+  componentDidMount(){
+    fetch("http://localhost:3001/task")
+    .then(res=>res.json())
+    .then(data=>{
+      if(data.error){
+        throw data.error
+      }
+      this.setState({
+        tasks:data
+      })
+      console.log('data',data)
+    })
+    .catch(error=>{
+      console.log('Get tasks request data error',error)
+    })
+  }
 
   render() {
     // console.log('props ToDo',this.props)
@@ -223,16 +246,18 @@ class ToDo extends React.Component {
             />
           )}
           {editableTask && (
-            <EditTaskModal
+            <TaskActionsModal
               editableTask={editableTask}
               onHide={this.setEditableTaskNull}
               onSubmit={this.handleEditTask}
             />
           )}
           {isOpenAddTaskModal && (
-            <AddTaskModal
+            <TaskActionsModal
+              // onHide={this.toggleOpenAddTaskModal}
+              // handleSubmit={this.handleSubmit}
               onHide={this.toggleOpenAddTaskModal}
-              handleSubmit={this.handleSubmit}
+              onSubmit={this.handleSubmit}
             />
           )}
         </div>

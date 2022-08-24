@@ -1,14 +1,18 @@
 import React from 'react';
 import {Form, Button, Modal} from 'react-bootstrap';
 import PropTypes from 'prop-types';
+import DatePicker from "react-datepicker"
 
-class AddTask extends React.Component {
+
+class TaskActionsModal extends React.Component {
   constructor(props){
     super(props);
     this.inputRef=React.createRef()
     this.state={
       title:'',
-      description:''
+      description:'',
+      ...props.editableTask,
+      date:props.editableTask? new Date(props.editableTask.date):new Date()
     }
   }
 state = {
@@ -23,8 +27,8 @@ handleChange=(event)=>{
 }
 
 handleS = ({key, type}) => {
-const { title,description } = this.state;
-const { handleSubmit, onHide } = this.props;
+const { title,description, date } = this.state;
+const { onSubmit, onHide } = this.props;
   if(
     (type==='keypress'&& key!=='Enter')||(!title && !description)
     ) return;
@@ -32,11 +36,18 @@ const { handleSubmit, onHide } = this.props;
 
 const formData={
   title,
-  description
+  description,
+  date
 }
- handleSubmit(formData);
+ onSubmit(formData);
         onHide();
       }
+
+handleSetDate=(date)=>{
+  this.setState({
+    date
+  });
+}
       
 
       componentDidMount(){
@@ -44,7 +55,7 @@ const formData={
       }
 
     render(){
-    const { title, description } = this.state;
+    const { title, description, date } = this.state;
     const {onHide}=this.props
       return(
       <Modal
@@ -82,6 +93,10 @@ const formData={
             style={{ width: "70%", resize: "none" }}
             value={description}
           />
+          <DatePicker 
+          selected={date} 
+          onChange={(date:Date) => this.handleSetDate(date)
+          } />
         </Modal.Body>
 
         <Modal.Footer>
@@ -100,8 +115,9 @@ const formData={
     }
 }
 
-AddTask.propTypes={
-  handleSubmit:PropTypes.func.isRequired,
-  onHide: PropTypes.func.isRequired
+TaskActionsModal.propTypes={
+  onSubmit:PropTypes.func.isRequired,
+  onHide: PropTypes.func.isRequired,
+  editableTask:PropTypes.object
 }
-export default AddTask;
+export default TaskActionsModal;

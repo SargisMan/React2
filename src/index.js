@@ -3,11 +3,14 @@ import ReactDOM from 'react-dom';
 import './reset.css';
 import './index.css';
 import "bootstrap/dist/css/bootstrap.min.css";
+import "react-datepicker/dist/react-datepicker.css";
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import './JSTests/async';
 
 ReactDOM.render(
   <React.StrictMode>
+    {/* <div>Demo</div> */}
     <App />
   </React.StrictMode>,
   document.getElementById('root')
