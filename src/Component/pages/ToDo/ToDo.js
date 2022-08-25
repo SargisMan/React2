@@ -1,14 +1,14 @@
 import React, {Fragment} from 'react';
-import Task from '../Task/task';
+import Task from '../../Task/task';
 // import idGenerator from '../../helpers/idGenerator';
-import dateFommatter from '../../helpers/date';
+import dateFommatter from '../../../helpers/date';
 import {Container, Row, Col, Button} from 'react-bootstrap'
 // import Button from '@restart/ui/esm/Button';
 // import withTest from '../../Hoc/whithTest';
 // import withScreenSizes from '../../Hoc/withScreenSizes';
-import Confirm from '../Confirm/Confirm';
+import Confirm from '../../Confirm/Confirm';
 // import EditTaskModal from '../EditTaskModal/EditTaskModal';
-import TaskActionsModal from '../TaskActionsModal/TaskActionsModal'
+import TaskActionsModal from '../../TaskActionsModal/TaskActionsModal'
 
 
 class ToDo extends React.Component {
@@ -50,12 +50,27 @@ class ToDo extends React.Component {
 
   };
 
-  handleDeleteOneTask = (id) => {
-    let tasks = [...this.state.tasks];
-    tasks = tasks.filter((item) => item._id !== id);
-    this.setState({
-      tasks,
-    });
+  handleDeleteOneTask = (_id) => {
+    console.log("http://localhost:3001/task/"+_id)
+fetch("http://localhost:3001/task/"+_id,{
+  method:"DELETE",
+})
+.then(res=>res.json())
+.then(data=>{
+  if(data.error){
+    throw data.error
+  }
+  let tasks = [...this.state.tasks];
+  tasks = tasks.filter((item) => item._id !== _id);
+  this.setState({
+    tasks,
+  });
+})
+.catch(error=>{
+  console.log('DELETE task request error',error)
+})
+
+   
     // const idx=tasks.findIndex(item=>item._id===id);
     // tasks.splice(idx,1);
   };
@@ -134,12 +149,28 @@ class ToDo extends React.Component {
   };
 
   handleEditTask = (editTask) => {
-    const tasks = [...this.state.tasks];
-    const idx = tasks.findIndex((task) => task._id === editTask._id);
-    tasks[idx] = editTask;
-    this.setState({
-      tasks,
-    });
+    fetch("http://localhost:3001/task/"+editTask._id,{
+      method:"PUT",
+      body:JSON.stringify(editTask),
+      headers:{
+        "Content-Type":"Application/json"
+      }
+    })
+    .then(res=>res.json())
+    .then(data=>{
+      if(data.error){
+        throw data.error
+      }
+      const tasks = [...this.state.tasks];
+      const idx = tasks.findIndex((task) => task._id === data._id);
+      tasks[idx] = data;
+      this.setState({
+        tasks,
+      });
+    })
+   .catch(error=>{
+    console.log('Edit request data error',error)
+   })
   };
 
   toggleOpenAddTaskModal = () => {

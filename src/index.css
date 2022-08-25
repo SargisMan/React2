@@ -48,3 +48,11 @@ code {
   flex-direction: column;
   justify-content: space-between;
 }
+
+.nav-item{
+  padding: 10px 15px;
+}
+
+a:hover {
+  text-decoration:none;
+}

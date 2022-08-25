@@ -1,7 +1,8 @@
 import React from 'react';
 import {Form, Button, Modal} from 'react-bootstrap';
 import PropTypes from 'prop-types';
-import DatePicker from "react-datepicker"
+import DatePicker from "react-datepicker";
+import dateFommatter from '../../helpers/date';
 
 
 class TaskActionsModal extends React.Component {
@@ -27,18 +28,23 @@ handleChange=(event)=>{
 }
 
 handleS = ({key, type}) => {
-const { title,description, date } = this.state;
+const { title,description } = this.state;
 const { onSubmit, onHide } = this.props;
   if(
     (type==='keypress'&& key!=='Enter')||(!title && !description)
     ) return;
+
+const formData={...this.state};
+formData.date=dateFommatter(formData.date);
+
+
   // console.log("input", this.inputRef.current.value);
 
-const formData={
-  title,
-  description,
-  date
-}
+// const formData={
+//   title,
+//   description,
+//   date
+// }
  onSubmit(formData);
         onHide();
       }
@@ -107,7 +113,7 @@ handleSetDate=(date)=>{
           onClick={this.handleS} 
           variant="primary"
           disabled={!!!title||!!!description}>
-            Add
+            {this.props.editableTask?"Save":"Add"}
           </Button>
         </Modal.Footer>
       </Modal>
