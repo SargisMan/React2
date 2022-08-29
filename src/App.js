@@ -6,10 +6,14 @@ import ToDo from './/Component/pages/ToDo/ToDo';
 // import Demo from './Demo/Demo';
 // import Row from './Demo/Row';
 import Navbar from "./Component/NavBar/Navbar";
-import { Routes, Route, Redirect } from "react-router-dom"
+import { Route, Redirect, Switch } from "react-router-dom"
 //pages
 import Contact from './Component/pages/Contact/Contact';
-import About from './Component/pages/About/about'
+import About from './Component/pages/About/about';
+import NotFound from "./Component/pages/NotFound/NotFound";
+import SingleTask from "./Component/pages/SingleTask/SingleTask";
+
+
 
 class App extends Component {
   state = {
@@ -28,15 +32,30 @@ class App extends Component {
         <Navbar />
 
         {/* example1 */}
-        <Routes>
+
+        <Switch>
+        <Route path="/" component={ToDo} exact/> />
+        <Route path="/contact" component={Contact} exact/>
+        <Route path="/about" component={About} exact/>
+        <Route path="/task/:id" component={SingleTask} exact/>
+        {/* <Route path="/*" componen={NotFound} exact/> */}
+        <Route path="/404" component={NotFound} exact/>
+        <Redirect to="/"/>
+        </Switch>
+      
+        {/* <Routes>
         <Route path="/" element={<ToDo/>} exact/>
         <Route path="/contact" element={<Contact/>} exact/>
         <Route path="/about" element={<About/>} exact/>
+        <Route path="/task/:id" element={<SingleTask props={{userName:"Bio", from:''}}/>} exact/>
+        <Route path="/*" element={<NotFound/>} exact/> */}
+        {/* <Route path="/404" element={<NotFound/>} exact/> */}
         {/* <Redirect to="/"/> */}
-        </Routes>
+        {/* </Routes> */}
+      
 
 {/* example2 */}
-        {/* <Routes>
+        {/* <Switch>
           <Route path="/">
             <ToDo />
           </Route>
@@ -46,16 +65,19 @@ class App extends Component {
           <Route path="/about" exact>
             <About />
           </Route>
-        </Routes> */}
+          <Route path="/task/:id" exact>
+            <SingleTask />
+          </Route>
+        </Switch> */}
 
 
 {/* example3 */}
-        {/* <Routes>
-          <Route path=""  render={()=><ToDo/>}/>
-          <Route path=""  render={()=><Contact/>}/>
-          <Route path=""  render={()=>About} />
-          <Route/>
-        </Routes> */}
+        {/* <Switch>
+          <Route path="/"  render={()=><ToDo/>} extend/>
+          <Route path="/contact"  render={()=><Contact/>} extend/>
+          <Route path="/about"  render={()=>About} extend/>
+          <Route path="/task/:id"  render={()=>About} extend/>
+        </Switch> */}
 
         
         {/* <LifeCycle /> */}

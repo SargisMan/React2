@@ -2,6 +2,7 @@ import React , {memo} from 'react';
 import { Card, Button } from 'react-bootstrap';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash, faEdit } from "@fortawesome/free-solid-svg-icons";
+import { Link } from 'react-router-dom';
 import styles from './task.module.css';
 import PropTypes from 'prop-types';
 import dateFommatter from '../../helpers/date';
@@ -26,7 +27,11 @@ const Task = ({
           // onKeyPress={()=>console.log("key Press")}
           checked={checked}
         />
-        <Card.Title>Title: {task.title}</Card.Title>
+        <Card.Title>
+          <Link to={`/task/${task._id}`}>
+          Title: {task.title}
+          </Link>          
+          </Card.Title>
         <Card.Text>Description: {task.description}</Card.Text>
         <Card.Text>Date: {dateFommatter(task.date)}</Card.Text>
         <Card.Text>Created_AT: {dateFommatter(task.created_at)}</Card.Text>

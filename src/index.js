@@ -7,14 +7,19 @@ import "react-datepicker/dist/react-datepicker.css";
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import './JSTests/async';
-import {BrowserRouter} from 'react-router-dom'
+import {BrowserRouter} from 'react-router-dom';
+
 
 ReactDOM.render(
   <React.StrictMode>
     {/* <div>Demo</div> */}
+   <div>
+   </div>
     <BrowserRouter>
-    <App />
+    <App />    
     </BrowserRouter>
+    
+    
   </React.StrictMode>,
   document.getElementById('root')
 );

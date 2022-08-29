@@ -1,0 +1,25 @@
+.task{
+    width:50%;
+    padding:30px;
+    box-shadow:15px 15px 40px black
+}
+.singleTask{
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    height: 90vh;
+}
+
+.date{
+    font-style: italic;
+}
+
+.created_at{
+    font-style: italic;
+}
+
+.btn-warning {
+    color: #000;
+    background-color: #07ff1c;
+    border-color: #ffc107;
+}
