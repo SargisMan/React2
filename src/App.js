@@ -13,7 +13,28 @@ import About from './Component/pages/About/about';
 import NotFound from "./Component/pages/NotFound/NotFound";
 import SingleTask from "./Component/pages/SingleTask/SingleTask";
 
-
+const pages=[
+  {
+    path:"/",
+    component:ToDo
+  },
+  {
+    path:"/contact",
+    component:Contact
+  },
+  {
+    path:"/about",
+    component:About
+  },
+  {
+    path:"/task/:id",
+    component:SingleTask
+  },
+  {
+    path:"/404",
+    component:NotFound
+  }
+]
 
 class App extends Component {
   state = {
@@ -21,6 +42,14 @@ class App extends Component {
   };
 
   render() {
+    const pagesRoutes=pages.map((page,index)=>{
+      return <Route 
+      key={index}
+      path={page.path} 
+      component={page.component} 
+      exact
+      />
+    })
     // const style={
     //   width:"50px",
     //   height:"50px",
@@ -34,12 +63,12 @@ class App extends Component {
         {/* example1 */}
 
         <Switch>
-        <Route path="/" component={ToDo} exact/> />
+        {pagesRoutes}
+        {/* <Route path="/" component={ToDo} exact/> />
         <Route path="/contact" component={Contact} exact/>
         <Route path="/about" component={About} exact/>
         <Route path="/task/:id" component={SingleTask} exact/>
-        {/* <Route path="/*" componen={NotFound} exact/> */}
-        <Route path="/404" component={NotFound} exact/>
+        <Route path="/404" component={NotFound} exact/> */}
         <Redirect to="/"/>
         </Switch>
       
@@ -73,8 +102,8 @@ class App extends Component {
 
 {/* example3 */}
         {/* <Switch>
-          <Route path="/"  render={()=><ToDo/>} extend/>
-          <Route path="/contact"  render={()=><Contact/>} extend/>
+          <Route path="/"  render={(props)=><ToDo {...props}/>} extend/>
+          <Route path="/contact"  render={(props)=><Contact {...props}/>} extend/>
           <Route path="/about"  render={()=>About} extend/>
           <Route path="/task/:id"  render={()=>About} extend/>
         </Switch> */}

@@ -7,15 +7,15 @@ import styles from './task.module.css';
 import PropTypes from 'prop-types';
 import dateFommatter from '../../helpers/date';
 
+
 const Task = ({
   task, //object
   disabled, //boolean
   handleDeleteOneTask, //function
   toggleSetRemoveTaskIds,
   checked,
-  handleSetEditTask
+  handleSetEditTask,
 }) => {
-  // console.log(`render`);
   return (
     <Card className={`${styles.card} ${checked && styles.checked}`}>
       <Card.Body className="cardBody">

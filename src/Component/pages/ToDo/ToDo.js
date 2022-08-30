@@ -8,7 +8,8 @@ import {Container, Row, Col, Button} from 'react-bootstrap'
 // import withScreenSizes from '../../Hoc/withScreenSizes';
 import Confirm from '../../Confirm/Confirm';
 // import EditTaskModal from '../EditTaskModal/EditTaskModal';
-import TaskActionsModal from '../../TaskActionsModal/TaskActionsModal'
+import TaskActionsModal from '../../TaskActionsModal/TaskActionsModal';
+import Preloader from '../../Preloader/Preloader';
 
 
 class ToDo extends React.Component {
@@ -19,6 +20,7 @@ class ToDo extends React.Component {
     isConfirmModal: false,
     editableTask: null,
     isOpenAddTaskModal: false,
+    loading:false
   };
 
   handleSubmit = (formData) => {
@@ -41,8 +43,7 @@ class ToDo extends React.Component {
       tasks.push(data);
       this.setState({
         tasks,
-      });
-      console.log('data',data);      
+      });     
     })
     .catch(error=>{
       console.log("Catch error",error)
@@ -184,6 +185,9 @@ fetch("http://localhost:3001/task/"+_id,{
   // }
 
   componentDidMount(){
+    this.setState({
+      loading:true
+    })
     fetch("http://localhost:3001/task")
     .then(res=>res.json())
     .then(data=>{
@@ -191,13 +195,20 @@ fetch("http://localhost:3001/task/"+_id,{
         throw data.error
       }
       this.setState({
-        tasks:data
+        tasks:data,
       })
       console.log('data',data)
     })
     .catch(error=>{
       console.log('Get tasks request data error',error)
     })
+    .finally(()=>{
+      this.setState({
+        loading:false
+      })
+    })
+
+    console.log('this-props',this.props)
   }
 
   render() {
@@ -208,8 +219,12 @@ fetch("http://localhost:3001/task/"+_id,{
       isAllChecked,
       isConfirmModal,
       editableTask,
-      isOpenAddTaskModal
+      isOpenAddTaskModal,
+      loading
     } = this.state;
+
+    if(loading) return <Preloader />
+
     const Tasks = this.state.tasks.map((task, index) => {
       // սարքում ենք Tasks-ը, որ return անենք
       return (
