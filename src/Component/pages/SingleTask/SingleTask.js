@@ -2,12 +2,14 @@ import React from 'react';
 import styles from '../SingleTask/singleTask.module.css';
 import dateFommatter from '../../../helpers/date';
 import {Button} from 'react-bootstrap';
-import TaskActionsModal from '../../TaskActionsModal/TaskActionsModal'
+import TaskActionsModal from '../../TaskActionsModal/TaskActionsModal';
+import Preloader from '../../Preloader/Preloader';
 
 class SingleTask extends React.Component{
 state={
     singleTask:null,
-    isEditModal:false
+    isEditModal:false,
+    loading:false
 }
 
 toggleEditModal=()=>{
@@ -17,6 +19,7 @@ toggleEditModal=()=>{
 }
 
 handleEditTask=(formData)=>{
+    this.setState({loading:true}) //loading started
     fetch("http://localhost:3001/task/" + formData._id,{
         method:"PUT",
         body:JSON.stringify(formData),
@@ -30,13 +33,15 @@ handleEditTask=(formData)=>{
         throw data.error;
         // console.log('singleTask Edit data',data)
        this.setState({
-        singleTask:data
+        singleTask:data,
+        isEditModal:false,
         })
-        this.props.history.push('/')
+        // this.props.history.push('/')
     })
     .catch(error=>{
         console.error('Edit task data error', error)
     })
+    .finally(()=>{this.setState({loading:false})}) //loading ended
 }
 
 handleDeleteTask=(id)=>{
@@ -54,6 +59,7 @@ fetch(`http://localhost:3001/task/${id}`,{
 })
 }
 componentDidMount(){
+    this.setState({loading:true}) //loading started
     const {id}=this.props.match.params;
     fetch(`http://localhost:3001/task/${id}`)
     .then(res=>res.json())
@@ -66,26 +72,32 @@ componentDidMount(){
             });
     })
     .catch(error=>{
+        const {history}=this.props;
+        history.push("/404");
         console.error('Get singleTask data Error', error)
+    })
+    .finally(()=>{
+        this.setState({loading:false}) //loading ended
     })
 }
     render(){
         // console.log('props',props);   
-        const {singleTask, isEditModal}=this.state;
-        if(!singleTask){
-            return <div>
-                <span>Loading...</span>
-            </div>
-        }     
+        const {
+            singleTask, 
+            isEditModal, 
+            loading
+            }=this.state;
+        // if(!singleTask){
+        //     return <div>
+        //         <span>Loading...</span>
+        //     </div>
+        // }     
+
+          if(!singleTask) return <Preloader/>
 
         return(
             <>
         <div className={styles.singleTask}>
-            <div>
-                <button onClick={()=>this.props.history.goBack()}>
-                    Go Back
-                </button>
-            </div>
             {/* <h1>SingleTask page</h1> */}
             <div className={styles.task}>
                 <h2>{singleTask.title}</h2>
@@ -116,6 +128,9 @@ componentDidMount(){
             onHide={this.toggleEditModal}
             onSubmit={this.handleEditTask}
             />
+        }
+        {
+            loading && <Preloader/>
         }
         </>
         )

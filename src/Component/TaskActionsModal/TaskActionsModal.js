@@ -5,6 +5,7 @@ import DatePicker from "react-datepicker";
 import dateFommatter from '../../helpers/date';
 
 
+
 class TaskActionsModal extends React.Component {
   constructor(props){
     super(props);
@@ -13,7 +14,8 @@ class TaskActionsModal extends React.Component {
       title:'',
       description:'',
       ...props.editableTask,
-      date:props.editableTask? new Date(props.editableTask.date):new Date()
+      date:props.editableTask? new Date(props.editableTask.date):new Date(),
+      loading:false
     }
   }
 state = {
@@ -36,8 +38,6 @@ const { onSubmit, onHide } = this.props;
 
 const formData={...this.state};
 formData.date=dateFommatter(formData.date);
-
-
   // console.log("input", this.inputRef.current.value);
 
 // const formData={
@@ -46,7 +46,7 @@ formData.date=dateFommatter(formData.date);
 //   date
 // }
  onSubmit(formData);
-        onHide();
+        // onHide();
       }
 
 handleSetDate=(date)=>{
@@ -59,6 +59,10 @@ handleSetDate=(date)=>{
       componentDidMount(){
       this.inputRef.current.focus();
       }
+
+      // componentWillUnmount(){
+      //   console.log("TaskAction Component died")
+      // }
 
     render(){
     const { title, description, date } = this.state;

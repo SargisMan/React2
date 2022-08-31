@@ -28,7 +28,10 @@ class ToDo extends React.Component {
     formData.date=dateFommatter(formData.date);
     // console.log(`value`, value);
     const tasks = [...this.state.tasks];
-    fetch("http://localhost:3001/task",{
+    this.setState({
+      loading:true
+    }) //loading started
+    fetch("http://localhost:3001/task/",{
       method:"POST",
       body:JSON.stringify(formData),
       headers:{
@@ -41,6 +44,8 @@ class ToDo extends React.Component {
         throw data.error
       };
       tasks.push(data);
+      this.state.isOpenAddTaskModal && this.toggleOpenAddTaskModal()
+      // this.state.editableTask && this.handleSetEditTask()
       this.setState({
         tasks,
       });     
@@ -48,10 +53,15 @@ class ToDo extends React.Component {
     .catch(error=>{
       console.log("Catch error",error)
     })
-
+    .finally(()=>{
+    this.setState({
+      loading:false
+    }) //loading finished
+    })
   };
 
   handleDeleteOneTask = (_id) => {
+    this.setState({loading:true}) //loading started
     console.log("http://localhost:3001/task/"+_id)
 fetch("http://localhost:3001/task/"+_id,{
   method:"DELETE",
@@ -70,7 +80,9 @@ fetch("http://localhost:3001/task/"+_id,{
 .catch(error=>{
   console.log('DELETE task request error',error)
 })
-
+.finally(()=>{
+  this.setState({loading:false}) //loading ended
+})
    
     // const idx=tasks.findIndex(item=>item._id===id);
     // tasks.splice(idx,1);
@@ -90,6 +102,7 @@ fetch("http://localhost:3001/task/"+_id,{
   };
 
   removeSelectedTasks = () => {
+    this.setState({loading:true}) //loading started
     fetch("http://localhost:3001/task",{
       method:"PATCH",
       body:JSON.stringify({tasks:Array.from(this.state.removeTasks)}),
@@ -113,6 +126,12 @@ fetch("http://localhost:3001/task/"+_id,{
           isAllChecked: false,
         });
       console.log('data',data)
+    })
+    .catch(error=>{
+return console.error('Delete any task request error',error)
+    })
+    .finally(()=>{
+      this.setState({loading:false})
     })
   };
 
@@ -150,6 +169,7 @@ fetch("http://localhost:3001/task/"+_id,{
   };
 
   handleEditTask = (editTask) => {
+    this.setState({loading:true}) //loading started
     fetch("http://localhost:3001/task/"+editTask._id,{
       method:"PUT",
       body:JSON.stringify(editTask),
@@ -165,12 +185,16 @@ fetch("http://localhost:3001/task/"+_id,{
       const tasks = [...this.state.tasks];
       const idx = tasks.findIndex((task) => task._id === data._id);
       tasks[idx] = data;
+      this.state.editableTask && this.handleSetEditTask();
       this.setState({
         tasks,
       });
     })
    .catch(error=>{
     console.log('Edit request data error',error)
+   })
+   .finally(()=>{
+    this.setState({loading:false}) //loading ended
    })
   };
 
@@ -223,7 +247,6 @@ fetch("http://localhost:3001/task/"+_id,{
       loading
     } = this.state;
 
-    if(loading) return <Preloader />
 
     const Tasks = this.state.tasks.map((task, index) => {
       // սարքում ենք Tasks-ը, որ return անենք
@@ -306,6 +329,10 @@ fetch("http://localhost:3001/task/"+_id,{
               onSubmit={this.handleSubmit}
             />
           )}
+
+          {
+            loading && <Preloader/>
+          }
         </div>
       </Fragment>
     );
