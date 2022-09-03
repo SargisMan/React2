@@ -1,4 +1,4 @@
-console.log("Hello Async");
+// console.log("Hello Async");
   
 //version1
 // setTimeout(()=>{
@@ -75,44 +75,47 @@ console.log("Hello Async");
 
 
 //Promisis
-const t=5;
-const q=6;
-function sump(t,q,callback){
-    setTimeout(()=>{
-        console.log(`${t}+${q}=`,t+q)
-        callback && callback({
-            data:t+q,
-            resolve:callback
-        })
-    },1000)
-}
-function mult3(t,q,callback){
-    setTimeout(()=>{
-        console.log(`${t}*${q}=`,t*q);
-        callback && callback({
-            data:t*q,
-            resolve:callback
-        })
-    },1000)
-}
+// const t=5;
+// const q=6;
+// function sump(t,q,callback){
+//     setTimeout(()=>{
+//         console.log(`${t}+${q}=`,t+q)
+//         callback && callback({
+//             data:t+q,
+//             resolve:callback
+//         })
+//     },1000)
+// }
+// function mult3(t,q,callback){
+//     setTimeout(()=>{
+//         console.log(`${t}*${q}=`,t*q);
+//         callback && callback({
+//             data:t*q,
+//             resolve:callback
+//         })
+//     },1000)
+// }
 
 
-function Success(){
-    setTimeout(()=>{
-        console.log('Success');
-    },2000)
-}
+// function Success(){
+//     setTimeout(()=>{
+//         console.log('Success');
+//     },2000)
+// }
 
-function Failed(){
-    setTimeout(()=>{
-        console.log('Failed');
-    },2000)
-}
+// function Failed(){
+//     setTimeout(()=>{
+//         console.log('Failed');
+//     },2000)
+// }
 
-const p=new Promise((resolve, reject)=>{
-    sump(4,5,resolve)
-});
-console.log('p',p)
+// const p=new Promise((resolve, reject)=>{
+//     sump(4,5,resolve)
+// });
+
+
+
+// console.log('p',p)
 // p.then((result)=>{ 
 //     console.log('result ',result);
 //     return "Second Promise";
@@ -120,21 +123,23 @@ console.log('p',p)
 // .then((text)=>{
 //     console.log('text',text);
 // })
-p.then((result)=>{
-    console.log('result',result);
-    return new Promise ((resolve, reject)=>{
-        mult3(4,5,resolve);
-    }).then((data)=>{
-        console.log('data',data);
-    })
-    .then((result2)=>{
-        return new Promise((resolve,reject)=>{
-            sump(2,4,resolve)
-        }).then((data)=>{
-            console.log('data',data)
-        })
-    }) 
-})
+
+
+// p.then((result)=>{
+//     console.log('result',result);
+//     return new Promise ((resolve, reject)=>{
+//         mult3(4,5,resolve);
+//     }).then((data)=>{
+//         // console.log('data',data);
+//     })
+//     .then((result2)=>{
+//         return new Promise((resolve,reject)=>{
+//             sump(2,4,resolve)
+//         }).then((data)=>{
+//             // console.log('data',data)
+//         })
+//     }) 
+// })
 
 
 

@@ -68,16 +68,14 @@ componentDidMount(){
         if(data.error)
             throw data.error;
             this.setState({
-                singleTask: data
+                singleTask: data,
+                loading:false //loading ended
             });
     })
     .catch(error=>{
         const {history}=this.props;
         history.push("/404");
         console.error('Get singleTask data Error', error)
-    })
-    .finally(()=>{
-        this.setState({loading:false}) //loading ended
     })
 }
     render(){
