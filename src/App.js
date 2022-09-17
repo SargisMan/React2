@@ -12,6 +12,8 @@ import Contact from './Component/pages/Contact/Contact';
 import About from './Component/pages/About/about';
 import NotFound from "./Component/pages/NotFound/NotFound";
 import SingleTask from "./Component/pages/SingleTask/SingleTask";
+import Hooks from './Demo/Hooks';
+import Lifecycle2 from './Demo/Lifecycle2'
 
 const pages=[
   {
@@ -38,6 +40,7 @@ const pages=[
 
 class App extends Component {
   state = {
+    isHooksPage:true,
     lifeCycle: true,
   };
 
@@ -57,20 +60,25 @@ class App extends Component {
     // }
     return (
       <div className="App">
+        {this.state.isHooksPage &&  <Hooks />}
+        {/* <Lifecycle2 /> */}
         {/* <Demo /> */}
-        <Navbar />
+        {/* <Navbar /> */}        
+        {/* <Switch> */}
+         {/* {pagesRoutes} */}
+         {/* <Redirect to="/"/>
+        </Switch> */}
 
         {/* example1 */}
 
-        <Switch>
-        {pagesRoutes}
+        
+       
         {/* <Route path="/" component={ToDo} exact/> />
         <Route path="/contact" component={Contact} exact/>
         <Route path="/about" component={About} exact/>
         <Route path="/task/:id" component={SingleTask} exact/>
         <Route path="/404" component={NotFound} exact/> */}
-        <Redirect to="/"/>
-        </Switch>
+       
       
         {/* <Routes>
         <Route path="/" element={<ToDo/>} exact/>

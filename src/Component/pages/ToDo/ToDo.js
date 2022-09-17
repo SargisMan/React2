@@ -221,7 +221,7 @@ return console.error('Delete any task request error',error)
       this.setState({
         tasks:data,
       })
-      console.log('data',data)
+      // console.log('data',data)
     })
     .catch(error=>{
       console.log('Get tasks request data error',error)
@@ -232,7 +232,7 @@ return console.error('Delete any task request error',error)
       })
     })
 
-    console.log('this-props',this.props)
+    // console.log('this-props',this.props)
   }
 
   render() {
