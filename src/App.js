@@ -12,8 +12,12 @@ import Contact from './Component/pages/Contact/Contact';
 import About from './Component/pages/About/about';
 import NotFound from "./Component/pages/NotFound/NotFound";
 import SingleTask from "./Component/pages/SingleTask/SingleTask";
-import Hooks from './Demo/Hooks';
-import Lifecycle2 from './Demo/Lifecycle2'
+// import Hooks from './Demo/Hooks';
+// import Lifecycle2 from './Demo/Lifecycle2'
+import ContactContextProvider from "./Context/ContactPageContext";
+
+//Context
+// import HooksStateProvider from "./Context/ContextDemo";
 
 const pages=[
   {
@@ -40,18 +44,27 @@ const pages=[
 
 class App extends Component {
   state = {
-    isHooksPage:true,
     lifeCycle: true,
   };
 
   render() {
     const pagesRoutes=pages.map((page,index)=>{
+      if(page.path==="/contact"){
+        <ContactContextProvider 
+        key={index}>
+            return <Route         
+        path={page.path} 
+        component={page.component} 
+        exact
+        />
+        </ContactContextProvider>        
+      }    
       return <Route 
-      key={index}
-      path={page.path} 
-      component={page.component} 
-      exact
-      />
+        key={index}
+        path={page.path} 
+        component={page.component} 
+        exact
+        />  
     })
     // const style={
     //   width:"50px",
@@ -60,14 +73,18 @@ class App extends Component {
     // }
     return (
       <div className="App">
-        {this.state.isHooksPage &&  <Hooks />}
+        {/* <HooksStateProvider>
+        <Hooks />
+         <Lifecycle2 />
+        </HooksStateProvider> */}
+
         {/* <Lifecycle2 /> */}
         {/* <Demo /> */}
-        {/* <Navbar /> */}        
-        {/* <Switch> */}
-         {/* {pagesRoutes} */}
-         {/* <Redirect to="/"/>
-        </Switch> */}
+        <Navbar />        
+        <Switch>
+         {pagesRoutes}
+         <Redirect to="/"/>
+        </Switch>
 
         {/* example1 */}
 
